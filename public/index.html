@@ -9,18 +9,23 @@
     <title>Weather App</title>
 </head>
 
-<body>
+<body id="body">
     <div class="main" id="blur">
         <h1><strong>Weather App</strong></h1>
-        <input type="text" id="input" placeholder="Please enter any city"/>
+        <input type="text" id="input" placeholder="Please enter any city" />
         <button id="search">search</button>
-        <div type="button" style="color: purple; text-align:left;cursor: pointer;" id="current_location">Use current location</div>
+        <div type="button" style="color: purple; text-align:left;cursor: pointer;" id="current_location">Use current
+            location</div>
     </div>
     <div id="popup">
-        <button id="close">close</button>
-
+        <button id="close" style="float: right;">X</button>
+        <br>
+        <div id="units">
+            Celsius<input type="radio" id="celsius" class="unit" name="unit" value="celsius">
+            Fahrenheit<input type="radio" id="fahrenheit" class="unit" name="unit" value="fahrenheit">
+            Kelvin<input type="radio" id="Kelvin" class="unit" name="unit" value="Kelvin">
+        </div>
     </div>
-    
     <script type="text/javascript" src="./build.js"></script>
 </body>
 
