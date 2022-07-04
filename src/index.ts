@@ -1,10 +1,9 @@
-console.log(document);
-
 const blured = document.querySelector('#blur') as HTMLDivElement;
 const popup = document.querySelector('#popup') as HTMLDivElement;
+const currentLocation = document.querySelector('#current_location') as HTMLDivElement;
 const search = document.querySelector('#search') as HTMLButtonElement;
 const input = document.querySelector('#input') as HTMLInputElement;
-const closeBtn = document.querySelector('#close')  as HTMLButtonElement;
+const closeBtn = document.querySelector('#close') as HTMLButtonElement;
 
 search.addEventListener('click', (e) => {
     e.preventDefault();
@@ -18,21 +17,34 @@ closeBtn.addEventListener('click', (e) => {
     e.preventDefault();
     blured.classList.toggle('active');
     popup.classList.toggle('active');
-    window.location.href = './index.html'
+    window.location.href = './'
 });
+
+currentLocation.addEventListener('click', (e) => {
+    e.preventDefault();
+    blured.classList.toggle('active');
+    popup.classList.toggle('active');
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+            const lat = position.coords.latitude;
+            const long = position.coords.longitude;
+            currentLocationWeather.api(lat, long);
+        }, error => {
+            console.log('Need access to get location.');
+        });
+    }
+})
 
 
 let weather = {
-    "apiKey": '4eaa52706c47734ce0b08f4fb3192c63',
     "api": async function () {
         console.log(input.value);
         if (input.value) {
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${input.value}&appid=4eaa52706c47734ce0b08f4fb3192c63`);
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${input.value}&appid=${process.env.API_KEY}`);
             const data = await response.json();
 
             if (data.cod == 404) {
                 const span = document.createElement('div');
-                console.log("bgygyf")
                 span.innerHTML = 'Not matches';
                 span.style.color = 'red';
                 popup.appendChild(span);
@@ -50,6 +62,25 @@ let weather = {
             popup.appendChild(span);
         }
 
+    }
+}
+
+let currentLocationWeather = {
+    "api": async function (lat: number, long: number) {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${process.env.API_KEY}`);
+        const data = await response.json();
+
+        if (data.cod == 404) {
+            const span = document.createElement('div');
+            console.log("bgygyf")
+            span.innerHTML = 'Not matches';
+            span.style.color = 'red';
+            popup.appendChild(span);
+        }
+        else {
+            setImage(data.weather[0].main);
+            setContent(data);
+        }
     }
 }
 
@@ -73,13 +104,14 @@ const setImage = (currentWeather: string) => {
     popup.style.backgroundImage = image;
 }
 
+
+
 const setContent = (data: any) => {
     const place = document.createElement('div');
     place.innerHTML = `${data.name}, ${data.sys.country}`;
     popup.appendChild(place);
-
     const temp = document.createElement('div');
-    temp.innerHTML = `Temp = ${Math.round((data.main.temp - 273.15)*10)/10}, Min = ${Math.round((data.main.temp_min - 273.15)*10)/10}, Max = ${Math.round((data.main.temp_max - 273.15)*10)/10} `;
+    temp.innerHTML = `Temp = ${Math.round((data.main.temp - 273.15) * 10) / 10}, Min = ${Math.round((data.main.temp_min - 273.15) * 10) / 10}, Max = ${Math.round((data.main.temp_max - 273.15) * 10) / 10} `;
     popup.appendChild(temp);
 
     const weather = document.createElement('div');

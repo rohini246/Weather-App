@@ -8,9 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-console.log(document);
 const blured = document.querySelector('#blur');
 const popup = document.querySelector('#popup');
+const currentLocation = document.querySelector('#current_location');
 const search = document.querySelector('#search');
 const input = document.querySelector('#input');
 const closeBtn = document.querySelector('#close');
@@ -25,6 +25,20 @@ closeBtn.addEventListener('click', (e) => {
     blured.classList.toggle('active');
     popup.classList.toggle('active');
     window.location.href = './index.html';
+});
+currentLocation.addEventListener('click', (e) => {
+    e.preventDefault();
+    blured.classList.toggle('active');
+    popup.classList.toggle('active');
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+            const lat = position.coords.latitude;
+            const long = position.coords.longitude;
+            currentLocationWeather.api(lat, long);
+        }, error => {
+            console.log('Need access to get location.');
+        });
+    }
 });
 let weather = {
     "apiKey": '4eaa52706c47734ce0b08f4fb3192c63',
@@ -51,6 +65,26 @@ let weather = {
                 span.innerHTML = 'please enter any city';
                 span.style.color = 'red';
                 popup.appendChild(span);
+            }
+        });
+    }
+};
+let currentLocationWeather = {
+    "apiKey": '4eaa52706c47734ce0b08f4fb3192c63',
+    "api": function (lat, long) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=4eaa52706c47734ce0b08f4fb3192c63`);
+            const data = yield response.json();
+            if (data.cod == 404) {
+                const span = document.createElement('div');
+                console.log("bgygyf");
+                span.innerHTML = 'Not matches';
+                span.style.color = 'red';
+                popup.appendChild(span);
+            }
+            else {
+                setImage(data.weather[0].main);
+                setContent(data);
             }
         });
     }
