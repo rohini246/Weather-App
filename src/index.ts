@@ -1,60 +1,52 @@
 import { city } from './city';
-const body = document.querySelector('#body') as HTMLBodyElement;
 const blured = document.querySelector('#blur') as HTMLDivElement;
 const popup = document.querySelector('#popup') as HTMLDivElement;
 const currentLocation = document.querySelector('#current_location') as HTMLDivElement;
 const search = document.querySelector('#search') as HTMLButtonElement;
 const input = document.querySelector('#input') as HTMLInputElement;
 const closeBtn = document.querySelector('#close') as HTMLButtonElement;
-// const searchUnitBtn = document.querySelector('#search_unit') as HTMLDivElement;
 const celsius = document.querySelector('#celsius') as HTMLInputElement;
 const fahrenheit = document.querySelector('#fahrenheit') as HTMLInputElement;
 const Kelvin = document.querySelector('#Kelvin') as HTMLInputElement;
+const overlay = document.querySelector('#overlay') as HTMLDetailsElement;
+const suggesstions = document.querySelector('#suggesstions') as HTMLDataListElement;
 
-celsius.addEventListener('click',(e)=>{
-    localStorage.setItem('unit', celsius.value);
+celsius.addEventListener('click', (e) => {
+    setItems(celsius.value);
+});
+
+fahrenheit.addEventListener('click', (e) => {
+    setItems(fahrenheit.value);
+});
+
+Kelvin.addEventListener('click', (e) => {
+    setItems(Kelvin.value);
+});
+
+
+const setItems = (value: string) => {
+    localStorage.setItem('unit', value);
     popup.removeChild(document.querySelector('.place')!);
     popup.removeChild(document.querySelector('.temp')!);
     popup.removeChild(document.querySelector('.weather')!);
     weather();
-});
-
-fahrenheit.addEventListener('click',(e)=>{
-    localStorage.setItem('unit', fahrenheit.value);
-    popup.removeChild(document.querySelector('.place')!);
-    popup.removeChild(document.querySelector('.temp')!);
-    popup.removeChild(document.querySelector('.weather')!);
-    weather();
-});
-
-Kelvin.addEventListener('click',(e)=>{
-    localStorage.setItem('unit', Kelvin.value);
-    popup.removeChild(document.querySelector('.place')!);
-    popup.removeChild(document.querySelector('.temp')!);
-    popup.removeChild(document.querySelector('.weather')!);
-    weather();
-});
+    if (localStorage.getItem('lat')) {
+        popup.removeChild(document.querySelector('.span')!);
+        currentLocationWeather(parseInt(localStorage.getItem('lat')!), parseInt(localStorage.getItem('long')!))
+    }
+}
 
 
-
-
-
-// const radioBtn: any = document.getElementsByName('unit');
-// const arrOfRadioBtn = Array.prototype.slice.call(radioBtn);
-
-
-// searchUnitBtn.addEventListener('click', (e) => {
-//     e.preventDefault();
-//     const unit = arrOfRadioBtn.filter(data => data.checked);
-//     console.log(unit[0].value);
-//     localStorage.setItem('unit', unit[0].value);
-//     popup.removeChild(document.querySelector('.place')!);
-//     popup.removeChild(document.querySelector('.temp')!);
-//     popup.removeChild(document.querySelector('.weather')!);
-
-//     weather();
-// });
-
+overlay.addEventListener('click', (e) => {
+    e.preventDefault();
+    blured.classList.toggle('active');
+    popup.classList.toggle('active');
+    if (localStorage.getItem('long')) {
+        localStorage.removeItem('long');
+        localStorage.removeItem('lat');
+    }
+    window.location.href = './';
+})
 
 search.addEventListener('click', (e) => {
     e.preventDefault();
@@ -68,6 +60,10 @@ closeBtn.addEventListener('click', (e) => {
     e.preventDefault();
     blured.classList.toggle('active');
     popup.classList.toggle('active');
+    if (localStorage.getItem('long')) {
+        localStorage.removeItem('long');
+        localStorage.removeItem('lat');
+    }
     window.location.href = './';
 });
 
@@ -79,10 +75,15 @@ currentLocation.addEventListener('click', (e) => {
         navigator.geolocation.getCurrentPosition(position => {
             const lat = position.coords.latitude;
             const long = position.coords.longitude;
+            localStorage.setItem('lat', lat.toString());
+            localStorage.setItem('long', long.toString())
+            console.log(lat, long);
+
             currentLocationWeather(lat, long);
         }, error => {
             console.log('Need access to get location.');
             const span: HTMLSpanElement = document.createElement('span');
+            span.className = 'span';
             span.innerHTML = 'Need access to get location.';
             span.style.color = 'red';
             popup.appendChild(span);
@@ -95,33 +96,41 @@ input.addEventListener('keyup', (e) => {
     removeElements();
     for (let i of city) {
         if (i.toLowerCase().startsWith(input.value.toLowerCase()) && input.value != "") {
-            const listEle: HTMLLIElement = document.createElement('li');
-            listEle.classList.add("list-items");
-            listEle.style.cursor = 'pointer';
-
-            listEle.addEventListener('click', (e) => {
-                e.preventDefault();
-                displayNames(listEle.innerHTML.trim());
-            });
-
-            let word = i.substring(0, input.value.length);
-            word += i.substring(input.value.length);
-            listEle.innerHTML = word;
-            listEle.style.float = 'center';
-            blured.appendChild(listEle);
-
+            const options: HTMLOptionElement = document.createElement('option');
+            options.className = 'option';
+            options.textContent = i;
+            suggesstions.appendChild(options);
+            
         }
     }
-})
+});
 
-const displayNames = (value: string) => {
-    input.value = value;
+
+const options = document.querySelector('.option') as HTMLOptionElement;
+if (options != null) {
+    console.log(options, "op");
+
+
 }
 
-const removeElements = () => {
-    const items = document.querySelectorAll('.list-items');
-    items.forEach(item => item.remove())
+input.addEventListener('keyup', (e) => {
+    e.preventDefault();
+    if (e.keyCode == 13) {
+        blured.classList.toggle('active');
+        popup.classList.toggle('active');
+        const options: HTMLOptionElement = document.querySelector('.option')!;
+        if (options != null) {
+            suggesstions.removeChild(options);
+        }
+        weather();
+    }
+});
 
+
+
+const removeElements = () => {
+    const items = document.querySelectorAll('.option');
+    items.forEach(item => item.remove());
 
 }
 
@@ -131,6 +140,7 @@ const weather = async () => {
         const data = await response.json();
         if (data.cod == 404) {
             const span: HTMLSpanElement = document.createElement('span');
+            span.className = 'span';
             span.innerHTML = 'Not matches';
             span.style.color = 'red';
             popup.appendChild(span);
@@ -142,6 +152,7 @@ const weather = async () => {
     }
     else {
         const span: HTMLSpanElement = document.createElement('span');
+        span.className = 'span';
         span.innerHTML = 'please enter any city';
         span.style.color = 'red';
         popup.appendChild(span);
@@ -154,6 +165,7 @@ const currentLocationWeather = async (lat: number, long: number) => {
 
     if (data.cod == 404) {
         const span: HTMLDivElement = document.createElement('div');
+        span.className = 'span';
         span.innerHTML = 'Not matches';
         span.style.color = 'red';
         popup.appendChild(span);

@@ -14,7 +14,9 @@ body {
 }
 
 .main {
-    width: 600px;
+    /* width: 600px; */
+    width: 50vw;
+    height: 50vh;
     max-width: 90%;
     text-align: center;
     background-color: lightgrey;
@@ -51,7 +53,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 400px;
-    height: 110%;
+    height: 90%;
     padding: 50px;
     box-shadow: 0 5px 30px rgba(0, 0, 0, 30);
     background: #fff;

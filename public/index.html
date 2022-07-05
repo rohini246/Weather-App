@@ -1,3 +1,65 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./index.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"
+        id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+     jQuery first, then Popper.js, then Bootstrap JS -->
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script> -->
+<!--Bootsrap 4 CDN-->
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
+
+<!--Fontawesome CDN-->
+<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> -->
+<!-- <script type="text/javascript" src="./build.js" async></script>
+    <title>Weather App</title>
+</head>
+
+<body id="body">
+    <div id="modal">
+        <div class="main" id="blur">
+            <h1><strong>Weather App</strong></h1>
+            <input type="text" id="input" placeholder="Please enter any city" list='suggesstions' />
+            <datalist id="suggesstions"> </datalist>
+            <button id="search">search</button>
+            <div type="button" style="color: purple; text-align:left;cursor: pointer;" id="current_location">Use current
+                location</div>
+        </div>
+        <div id="popup">
+            <button id="close" style="float: right;">X</button>
+            <br>
+            <div id="units">
+                Celsius<input type="radio" id="celsius" class="unit" name="unit" value="celsius">
+                Fahrenheit<input type="radio" id="fahrenheit" class="unit" name="unit" value="fahrenheit">
+                Kelvin<input type="radio" id="Kelvin" class="unit" name="unit" value="Kelvin">
+            </div>
+        </div>
+    </div>
+    <div id="overlay" style="width: 100vw;height: 100vh;"></div>
+
+
+
+</body>
+
+</html> -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,27 +68,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./index.css">
+    <script type="text/javascript" src="./build.js" async></script>
     <title>Weather App</title>
 </head>
 
 <body id="body">
-    <div class="main" id="blur">
-        <h1><strong>Weather App</strong></h1>
-        <input type="text" id="input" placeholder="Please enter any city" />
-        <button id="search">search</button>
-        <div type="button" style="color: purple; text-align:left;cursor: pointer;" id="current_location">Use current
-            location</div>
-    </div>
-    <div id="popup">
-        <button id="close" style="float: right;">X</button>
-        <br>
-        <div id="units">
-            Celsius<input type="radio" id="celsius" class="unit" name="unit" value="celsius">
-            Fahrenheit<input type="radio" id="fahrenheit" class="unit" name="unit" value="fahrenheit">
-            Kelvin<input type="radio" id="Kelvin" class="unit" name="unit" value="Kelvin">
+    <div id="modal">
+        <div class="main" id="blur">
+            <h1><strong>Weather App</strong></h1>
+            <input type="text" id="input" placeholder="Please enter any city" list='suggesstions' />
+            <datalist id="suggesstions"> </datalist>
+            <button id="search">search</button>
+            <div type="button" style="color: purple; text-align:left;cursor: pointer;" id="current_location">Use current
+                location</div>
+        </div>
+        <div id="popup">
+            <button id="close" style="float: right;">X</button>
+            <br>
+            <div id="units">
+                Celsius<input type="radio" id="celsius" class="unit" name="unit" value="celsius">
+                Fahrenheit<input type="radio" id="fahrenheit" class="unit" name="unit" value="fahrenheit">
+                Kelvin<input type="radio" id="Kelvin" class="unit" name="unit" value="Kelvin">
+            </div>
         </div>
     </div>
-    <script type="text/javascript" src="./build.js"></script>
+    <div id="overlay"></div>
+    
 </body>
 
 </html>
